@@ -45,6 +45,6 @@ jobs:
           GH_PAT: ${{ secrets.REPO_ACCESS_TOKEN }}
           CONFIG_PATH: .github/sync.yml
           COMMIT_AS_PR_TITLE: true
-          COMMIT_PREFIX: "sync: NEXOPS-308"
+          COMMIT_PREFIX: "sync: GENOPSX-11"
           PR_BODY: "Automated file syncer for DevOps repos"
           OVERWRITE_EXISTING_PR: true
