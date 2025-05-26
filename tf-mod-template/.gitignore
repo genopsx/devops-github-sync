@@ -1,0 +1,45 @@
+### This file is synced from the tf-mod-template repository.
+### Changes should be made there and synced across.
+
+# Ignore application files
+.bundle
+.idea
+node_modules
+*.pyc
+.ruby-version
+venv/
+vendor
+.vscode
+build/
+
+# Local .terraform directories
+**/.terraform/*
+.terraform.lock.hcl
+.terragrunt-cache
+terragrunt.iml
+terragrunt
+terraform
+tfplan
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+
+# Ignore override files as they are usually used to override resources locally and so
+# are not checked in
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+# Ignore OS tmp files
+.*.sw?
+*.out
+.DS_Store

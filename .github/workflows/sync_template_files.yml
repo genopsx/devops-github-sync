@@ -1,0 +1,50 @@
+name: Sync Files
+on:
+  push:
+    branches:
+    - main
+  workflow_dispatch:
+
+jobs:
+  sync:
+    name: "Sync files to repos"
+    runs-on: ubuntu-latest
+    environment: devops
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install GH CLI
+        uses: dev-hanz-ops/install-gh-cli-action@v0.2.0
+
+        # Generates a list of the deploy and mod repos using their topics. Could parameterise the org name and repo topic.
+        # To add another, duplicate the two lines per repo.
+      - name: Generate repo lists
+        run: |
+          tf_mod_repos=$(gh api "/search/repositories?q=org%3Agenopsx+topic%3Aterraform-module-repo-sync+archived%3Afalse&per_page=1000" --jq  ".items[] | (.owner.login + \"/\" + .name)")
+          echo TF_MOD_REPOSITORIES=$tf_mod_repos >> $GITHUB_ENV
+          tf_deploy_repos=$(gh api "/search/repositories?q=org%3Agenopsx+topic%3Aterraform-deploy-repo-sync+archived%3Afalse&per_page=1000" --jq  ".items[] | (.owner.login + \"/\" + .name)")
+          echo TF_DEPLOY_REPOSITORIES=$tf_deploy_repos >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+
+
+      - name: Render sync file with Jinja2
+        uses: cuchi/jinja2-action@v1.2.2
+        with:
+          template: .github/sync.yml.j2
+          output_file: .github/sync.yml
+          strict: true
+        env:
+          tf_mod_repos: ${{ env.TF_MOD_REPOSITORIES }}
+          tf_deploy_repos: ${{ env.TF_DEPLOY_REPOSITORIES }}
+
+      - name: Run GitHub File Sync
+        uses: BetaHuhn/repo-file-sync-action@v1.21.0
+        with:
+          GH_PAT: ${{ secrets.REPO_ACCESS_TOKEN }}
+          CONFIG_PATH: .github/sync.yml
+          COMMIT_AS_PR_TITLE: true
+          COMMIT_PREFIX: "sync: NEXOPS-308"
+          PR_BODY: "Automated file syncer for DevOps repos"
+          OVERWRITE_EXISTING_PR: true

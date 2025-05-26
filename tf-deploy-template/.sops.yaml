@@ -1,0 +1,3 @@
+---
+creation_rules:
+  - kms: "arn:aws:kms:us-east-1:955769636964:alias/devops/terragrunt-sops,arn:aws:kms:us-east-1:185949550889:alias/devops/terragrunt-sops"

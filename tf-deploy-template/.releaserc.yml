@@ -1,0 +1,29 @@
+### This file is synced from the devops-github-sync repository.
+### Changes should be made there and synced across.
+
+branches:
+  - "main"
+plugins:
+  - "@semantic-release/commit-analyzer"
+  - "@semantic-release/release-notes-generator"
+  - "@semantic-release/github"
+  - "@semantic-release/git"
+analyzeCommits:
+  - path: "@semantic-release/commit-analyzer"
+    releaseRules:
+    - type: "fix"
+      release: "patch"
+    - type: "hotfix"
+      release: "patch"
+    - type: "patch"
+      release: "patch"
+    - type: "minor"
+      release: "minor"
+    - type: "feat"
+      release: "minor"
+    - type: "sync"
+      release: "minor"
+    - type: "breaking"
+      release: "major"
+    - type: "major"
+      release: "major"

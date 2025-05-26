@@ -1,0 +1,39 @@
+name: Add branch protection to all repos in org
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight
+  workflow_dispatch:
+
+jobs:
+  add-branch-protection:
+    strategy:
+      fail-fast: false
+      matrix:
+        org: [ genopsx ]  # ✅ Updated to your org
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Python dependencies
+        uses: py-actions/py-dependency-install@v4
+        with:
+          path: "./.github/scripts/requirements.txt"
+
+      - name: Run script against ${{ matrix.org }} org
+        id: run_script
+        run: |
+          echo "exit_status=fail" >> $GITHUB_OUTPUT
+          echo "status_icon=alert" >> $GITHUB_OUTPUT
+          python ./.github/scripts/github_branch_protection.py \
+            --force \
+            --slack-webhook ${{ secrets.SLACK_WEBHOOK_GENOPSX_DEVOPS_ALERTS }} \
+            --token ${{ secrets.GH_TOKEN_GENOPSX_AUTOMATION }} \
+            ${{ matrix.org }}
+          echo "exit_status=success" >> $GITHUB_OUTPUT
+          echo "status_icon=tada" >> $GITHUB_OUTPUT

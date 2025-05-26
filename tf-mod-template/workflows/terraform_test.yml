@@ -1,0 +1,14 @@
+### This file is synced from the devops-github-sync repository.
+### Changes should be made there and synced across.
+
+name: Terraform module tasks
+
+on: [pull_request]
+
+jobs:
+  terraform-test:
+    name: "Terraform tests"
+    uses: genopsx/devops-github-actions-workflows/.github/workflows/terraform_test.yml@main
+    with:
+      runs-on: self-hosted-devops-x86
+      terraform-version: 1.7.5

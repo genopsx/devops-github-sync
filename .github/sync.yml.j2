@@ -1,0 +1,42 @@
+{%- set tf_mod_repos = env['tf_mod_repos'].split() -%}
+{%- set tf_deploy_repos = env['tf_deploy_repos'].split() -%}
+group:
+  - repos: |
+{%- for repo in tf_mod_repos %}
+      {{ repo }}
+{%- endfor %}
+    files:
+      - source: tf-mod-template/.releaserc.yml
+        dest: .releaserc.yml
+      - source: tf-mod-template/.pre-commit-config.yaml
+        dest: .pre-commit-config.yaml
+      - source: tf-mod-template/.gitignore
+        dest: .gitignore
+      - source: tf-mod-template/workflows/
+        dest: .github/workflows/
+      - source: tf-mod-template/label-mod.tf
+        dest: label-mod.tf
+      - source: tf-mod-template/README.md
+        dest: README.md
+      - source: tf-mod-template/README-TF.md
+        dest: README-TF.md
+        replace: false
+      - source: tf-mod-template/dependabot.yml
+        dest: .github/dependabot.yml
+
+
+  - repos: |
+{%- for repo in tf_deploy_repos %}
+      {{ repo }}
+{%- endfor %}
+    files:
+      - source: tf-deploy-template/.releaserc.yml
+        dest: .releaserc.yml
+      - source: tf-deploy-template/.pre-commit-config.yaml
+        dest: .pre-commit-config.yaml
+      - source: tf-deploy-template/.gitignore
+        dest: .gitignore
+      - source: tf-deploy-template/.sops.yaml
+        dest: .sops.yaml
+      - source: tf-deploy-template/workflows/
+        dest: .github/workflows/

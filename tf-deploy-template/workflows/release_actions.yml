@@ -1,0 +1,16 @@
+### This file is synced from the tf-mod-template repository.
+### Changes should be made there and synced across.
+
+name: Terraform module post-merge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform_release:
+    name: "Terraform release"
+    uses: genopsx/devops-github-actions-workflows/.github/workflows/release.yml@main
+    with:
+      runs-on: amazon
