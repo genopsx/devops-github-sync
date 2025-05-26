@@ -30,7 +30,7 @@ jobs:
 
 
       - name: Render sync file with Jinja2
-        uses: cuchi/jinja2-action@v1.2.2
+        uses: cuchi/jinja2-action@v1.3.0
         with:
           template: .github/sync.yml.j2
           output_file: .github/sync.yml
